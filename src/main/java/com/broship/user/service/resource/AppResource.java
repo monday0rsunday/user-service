@@ -82,6 +82,7 @@ public class AppResource {
 			return new Message(new Error(1, "app " + appId + " not found"));
 		String versionKey = "v" + version + "_" + os;
 		app.getVersionConfigMap().put(versionKey, bodyStr);
+		appDb.updateApp(app);
 		return app.getVersionConfigMap().get(versionKey);
 	}
 

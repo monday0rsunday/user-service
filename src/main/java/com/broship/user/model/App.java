@@ -13,7 +13,7 @@ public class App {
 	@JsonProperty("fb_app_secret")
 	private String fbAppSecret;
 	@JsonProperty("configs")
-	private HashMap<String, String> versionConfigMap;
+	private HashMap<String, String> versionConfigMap = new HashMap<String, String>();
 
 	public String getId() {
 		return id;
