@@ -37,6 +37,7 @@ public class AppResource {
 		ObjectMapper om = new ObjectMapper();
 		try {
 			App app = om.readValue(bodyStr, App.class);
+			app.setId(appId);
 			appDb.updateApp(app);
 			return app;
 		} catch (IOException e) {
