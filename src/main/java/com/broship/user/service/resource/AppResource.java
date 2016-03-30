@@ -30,6 +30,7 @@ public class AppResource {
 	}
 
 	@POST
+	@Produces(Constant.APP_JSON_UTF8_MEDIA_TYPE)
 	@Path("/app/{app_id}")
 	public Object updateApp(@Context HttpServletRequest req, @PathParam("app_id") String appId, String bodyStr) {
 		logger.debug("update_app\t" + req.getRequestURI() + "\t" + bodyStr);
@@ -44,6 +45,7 @@ public class AppResource {
 	}
 
 	@GET
+	@Produces(Constant.APP_JSON_UTF8_MEDIA_TYPE)
 	@Path("/app/{app_id}")
 	public Object getApp(@Context HttpServletRequest req, @PathParam("app_id") String appId) {
 		App app = appDb.getApp(appId);
@@ -53,6 +55,7 @@ public class AppResource {
 	}
 
 	@POST
+	@Produces(Constant.APP_JSON_UTF8_MEDIA_TYPE)
 	@Path("/app/{app_id}/v{version}/config")
 	public Object updateAppAllConfig(@Context HttpServletRequest req, @PathParam("app_id") String appId,
 			@PathParam("version") String version, String bodyStr) {
@@ -68,6 +71,7 @@ public class AppResource {
 	}
 
 	@POST
+	@Produces(Constant.APP_JSON_UTF8_MEDIA_TYPE)
 	@Path("/app/{app_id}/v{version}_{os}/config")
 	public Object updateAppConfig(@Context HttpServletRequest req, @PathParam("app_id") String appId,
 			@PathParam("version") String version, @PathParam("os") String os, String bodyStr) {
