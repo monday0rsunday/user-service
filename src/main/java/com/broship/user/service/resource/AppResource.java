@@ -46,7 +46,10 @@ public class AppResource {
 	@GET
 	@Path("/app/{app_id}")
 	public Object getApp(@Context HttpServletRequest req, @PathParam("app_id") String appId) {
-		return appDb.getApp(appId);
+		App app = appDb.getApp(appId);
+		if (app == null)
+			return new Message(new Error(1, "app " + appId + " not found"));
+		return app;
 	}
 
 	@POST
@@ -70,6 +73,8 @@ public class AppResource {
 			@PathParam("version") String version, @PathParam("os") String os, String bodyStr) {
 		logger.debug("update_app_config\t" + req.getRequestURI() + "\t" + bodyStr);
 		App app = appDb.getApp(appId);
+		if (app == null)
+			return new Message(new Error(1, "app " + appId + " not found"));
 		String versionKey = "v" + version + "_" + os;
 		app.getVersionConfigMap().put(versionKey, bodyStr);
 		return app.getVersionConfigMap().get(versionKey);
@@ -82,6 +87,8 @@ public class AppResource {
 			@PathParam("version") String version, @PathParam("os") String os) {
 		logger.debug("get_app_config\t" + req.getRequestURI());
 		App app = appDb.getApp(appId);
+		if (app == null)
+			return new Message(new Error(1, "app " + appId + " not found"));
 		String versionKey = "v" + version + "_" + os;
 		String config = app.getVersionConfigMap().get(versionKey);
 		if (config == null) {
