@@ -32,6 +32,7 @@ import com.broship.user.service.IUserDb;
 import com.broship.user.service.model.AccessTokenResponse;
 import com.broship.user.service.model.AvatarResponse;
 import com.broship.user.service.model.UserResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Path("/")
 public class UserResource {
@@ -148,12 +149,37 @@ public class UserResource {
 		if (accessToken.getUserId() != userId) {
 			return new Message(new Error(1, "access token of other user"));
 		}
-		// TODO update user
 		User user = userDb.getUser(userId);
 		if (user == null) {
 			return new Message(new Error(1, "user " + userId + " does not exist"));
 		}
-		return new UserResponse(user);
+		ObjectMapper om = new ObjectMapper();
+		try {
+			UserResponse us = om.readValue(userStr, UserResponse.class);
+			if (us.getName() != null)
+				user.setName(us.getName());
+			if (us.getDob() != null) {
+				try {
+					user.setDob(UserResponse.dobFormat.parse(us.getDob()));
+				} catch (Exception e) {
+					logger.warn("parse date error ", e);
+				}
+			}
+			if (us.getHob() > -1)
+				user.setHob(us.getHob());
+			if (us.getIdentity() != null)
+				user.setIdentity(us.getIdentity());
+			if (us.getGender() != null)
+				user.setGender(us.getGender());
+			if (us.getPhone() != null)
+				user.setPhone(us.getPhone());
+			if (us.getEmail() != null)
+				user.setEmail(us.getEmail());
+			userDb.updateUser(user);
+		} catch (IOException e) {
+			return new Message(new Error(1, e.getMessage()));
+		}
+		return new UserResponse(userDb.getUser(userId));
 	}
 
 	@GZIP
@@ -187,7 +213,7 @@ public class UserResource {
 			byte[] avatarBytes = IOUtils.toByteArray(inputParts.get(0).getBody(InputStream.class, null));
 			// TODO convert image to jpeg
 			userDb.updateUserAvatar(userId, avatarBytes);
-			return new AvatarResponse(Config.getBasePath() + "/user/" + userId + "/avatar");
+			return new AvatarResponse(Config.getApiBasePath() + "/user/" + userId + "/avatar");
 		} catch (IOException e) {
 			return new Message(new Error(1, "error while processing uploadd avatar: " + e.getMessage()));
 		}

@@ -93,7 +93,7 @@
 				<configuration>
 					<archive>
 						<manifest>
-							<mainClass>com.broduce.user.service.Main</mainClass>
+							<mainClass>com.broship.user.service.Main</mainClass>
 						</manifest>
 					</archive>
 					<descriptorRefs>

@@ -17,7 +17,6 @@ public class UserResponse {
 	private String phone;
 	private String identity;
 	private String gender;
-	private String country;
 
 	public UserResponse() {
 
@@ -33,11 +32,6 @@ public class UserResponse {
 		this.phone = user.getPhone();
 		this.identity = user.getIdentity();
 		this.gender = user.getGender();
-		this.country = user.getCountry();
-	}
-
-	public static DateFormat getDobformat() {
-		return dobFormat;
 	}
 
 	public String getName() {
@@ -70,10 +64,6 @@ public class UserResponse {
 
 	public String getGender() {
 		return gender;
-	}
-
-	public String getCountry() {
-		return country;
 	}
 
 }
